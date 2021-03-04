@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "289743866023",
+    "project_id": "mindr-a7ae7",
+    "storage_bucket": "mindr-a7ae7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:289743866023:android:48b378b778cff3a8f6b382",
+        "android_client_info": {
+          "package_name": "com.example.mindr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "289743866023-qgr3lu4jso8pa1n42qq92ttnqrc4r3sl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHICiqWGI8-zv8dMFXLpUfyNrGWwwsabE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "289743866023-qgr3lu4jso8pa1n42qq92ttnqrc4r3sl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
