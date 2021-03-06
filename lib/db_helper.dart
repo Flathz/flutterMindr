@@ -33,7 +33,7 @@ class DBHelper {
     return note;
   }
 
-  Future<List<Note>> getStudents() async {
+  Future<List<Note>> getNotes() async {
     var dbClient = await db;
     List<Map> maps = await dbClient.query('note', columns: ['id', 'title', 'content']);
     List<Note> notes = [];

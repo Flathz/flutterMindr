@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/ListOfNotesWidget.dart';
+import 'package:flutter_app/addNoteWidget.dart';
 
 class Tabs extends StatelessWidget {
   @override
@@ -19,7 +20,7 @@ class Tabs extends StatelessWidget {
         body: TabBarView(
           children: <Widget>[
             Center(
-              child: Text('Add a note'),
+              child: AddNoteWidget(),
             ),
             Center(
               child: ListOfNotesWidget(),
