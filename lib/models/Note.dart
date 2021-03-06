@@ -10,7 +10,7 @@ class Note {
     return this.id;
   }
 
-      Map<String, dynamic> toMap() {
+    Map<String, dynamic> toMap() {
     var map = <String, dynamic>{
       'id': id,
       'title': title,
@@ -23,4 +23,5 @@ class Note {
     id = map['id'];
     title = map['title'];
     content = map['content'];
+  }
 }
