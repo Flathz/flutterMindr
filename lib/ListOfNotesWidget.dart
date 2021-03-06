@@ -23,7 +23,7 @@ class _ListOfNotesWidgetState extends State<ListOfNotesWidget> {
     dbHelper = DBHelper();
     dbHelper.getNotes().then((value) {
       setState(() {
-        _items = value;
+        _items = value.reversed.toList();
         _filterItems = _items;
       });
     });

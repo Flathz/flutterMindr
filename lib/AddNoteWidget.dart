@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/db_helper.dart';
+import 'package:intl/intl.dart';
 import 'models/Note.dart';
 
 class AddNoteWidget extends StatefulWidget {
@@ -14,6 +15,7 @@ class _AddNoteWidget extends State<AddNoteWidget> {
   final _formKey = GlobalKey<FormState>();
   DBHelper dbHelper;
   final content = TextEditingController();
+  List<Note> allNotes = [];
 
   @override
   void initState() {
@@ -28,34 +30,49 @@ class _AddNoteWidget extends State<AddNoteWidget> {
     super.dispose();
   }
 
-   Widget build(BuildContext context) {
-        // Build a Form widget using the _formKey created above.
+  addNote() {
+    var count = 0;
+    var title = "Note " + count.toString();
+    var note = Note(null, title, content.text,
+        DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now()));
+    dbHelper.add(note);
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text('Note ajouté !'),
+      duration: Duration(milliseconds: 500),
+    ));
+  }
+
+  Widget build(BuildContext context) {
+    // Build a Form widget using the _formKey created above.
     return Form(
       key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          TextFormField(
-            controller: content,
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Please enter some text';
-              }
-              return null;
-            },
-          ),
+          Container(
+              margin: EdgeInsets.only(top: 200, left: 30, right: 30),
+              child: TextFormField(
+                controller: content,
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
+              )),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: ElevatedButton(
+            child: Center(
+                child: FloatingActionButton(
               onPressed: () {
                 if (_formKey.currentState.validate()) {
                   _formKey.currentState.save();
-                  var note = Note(null, "test", content.text);
-                  dbHelper.add(note);
+                  addNote();
+                  content.text = "";
                 }
               },
-              child: Text('Add'),
-            ),
+              child: Icon(Icons.add),
+            )),
           ),
         ],
       ),

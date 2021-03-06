@@ -23,8 +23,8 @@ class DBHelper {
   }
 
   _onCreate(Database db, int version) async {
-    await db
-        .execute('CREATE TABLE note (id INTEGER PRIMARY KEY, title TEXT, content TEXT)');
+    await db.execute(
+        'CREATE TABLE note (id INTEGER PRIMARY KEY, title TEXT, content TEXT, date TEXT)');
   }
 
   Future<Note> add(Note note) async {
@@ -35,7 +35,8 @@ class DBHelper {
 
   Future<List<Note>> getNotes() async {
     var dbClient = await db;
-    List<Map> maps = await dbClient.query('note', columns: ['id', 'title', 'content']);
+    List<Map> maps = await dbClient
+        .query('note', columns: ['id', 'title', 'content', 'date']);
     List<Note> notes = [];
     if (maps.length > 0) {
       for (int i = 0; i < maps.length; i++) {
