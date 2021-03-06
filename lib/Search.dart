@@ -41,13 +41,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<Note> list = <Note>[
-    Note("Note1", "Allo"),
-    Note("Note2", "comment"),
-    Note("Note3", "va"),
-    Note("Note4", "tu"),
-    Note("Note5", "aujourd'hui"),
-    Note("Note6", "mon"),
-    Note("Note7", "brave"),
+    Note(1,"Note1", "Allo"),
+    Note(2,"Note2", "comment"),
+    Note(3,"Note3", "va"),
+    Note(4,"Note4", "tu"),
+    Note(5,"Note5", "aujourd'hui"),
+    Note(6,"Note6", "mon"),
+    Note(7,"Note7", "brave"),
   ];
 
   Note _selectedItem;
