@@ -16,6 +16,7 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
   bool _isListening = false;
   DBHelper dbHelper;
   String _text = 'Press the button and start speaking';
+  List<Note> allNotes = [];
 
   @override
   void initState() {
@@ -25,8 +26,13 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
   }
 
   addNote() {
-    var count = 0;
-    var title = "Note " + count.toString();
+    dbHelper.getNotes().then((value) {
+      setState(() {
+        allNotes = value.toList();
+      });
+    });
+    int length = allNotes.length + 1;
+    var title = "Note " + length.toString();
     var note = Note(null, title, _text,
         DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now()));
     dbHelper.add(note);
