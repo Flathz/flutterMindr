@@ -29,6 +29,20 @@ class _ListOfNotesWidgetState extends State<ListOfNotesWidget> {
     });
   }
 
+  refreshList() {
+    dbHelper.getNotes().then((value) {
+      setState(() {
+        _items = value.reversed.toList();
+        _filterItems = _items;
+      });
+    });
+  }
+
+  deleteNote(id) {
+    dbHelper.delete(id);
+    refreshList();
+  }
+
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     final oddItemColor = colorScheme.primary.withOpacity(0.05);
@@ -76,7 +90,31 @@ class _ListOfNotesWidgetState extends State<ListOfNotesWidget> {
                     _filterItems[index].isOdd ? oddItemColor : evenItemColor,
                 onTap: () => GestureTapCallback,
                 leading: Icon(Icons.notes_rounded),
-                trailing: Icon(Icons.delete),
+                trailing: GestureDetector(
+                    onTap: () {
+                      return showDialog(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                          title: Text("Delete ?"),
+                          content: Text("Do you want to delete this note ?"),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                deleteNote(_filterItems[index].id);
+                                Navigator.of(ctx).pop();
+                              },
+                              child: Text("Yes"),
+                            ),
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.of(ctx).pop();
+                                },
+                                child: Text("No"))
+                          ],
+                        ),
+                      );
+                    },
+                    child: Icon(Icons.delete)),
                 title: Text(_filterItems[index].title),
                 subtitle: Text(_filterItems[index].content),
               ),
