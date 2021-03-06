@@ -15,9 +15,6 @@ class Search extends State<ListOfNotesWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Search Widget"),
-      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(vertical: 16),
         child: Column(
@@ -32,7 +29,7 @@ class Search extends State<ListOfNotesWidget> {
                 listContainerHeight: MediaQuery.of(context).size.height / 4,
                 queryBuilder: (query, list) {
                   return list
-                      .where((item) => item.title
+                      .where((item) => item.content
                           .toLowerCase()
                           .contains(query.toLowerCase()))
                       .toList();
@@ -58,7 +55,7 @@ class Search extends State<ListOfNotesWidget> {
               height: 32,
             ),
             Text(
-              "${_selectedItem != null ? _selectedItem.title : ""
+              "${_selectedItem != null ? _selectedItem.content : ""
                   "No item selected"}",
             ),
           ],
@@ -92,7 +89,7 @@ class SelectedItemWidget extends StatelessWidget {
                 bottom: 8,
               ),
               child: Text(
-                selectedItem.title,
+                selectedItem.content,
                 style: const TextStyle(fontSize: 14),
               ),
             ),
@@ -180,7 +177,7 @@ class PopupListItemWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       child: Text(
-        item.title,
+        item.content,
         style: const TextStyle(fontSize: 16),
       ),
     );
