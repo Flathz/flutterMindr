@@ -14,37 +14,48 @@ class ListOfNotesWidget extends StatefulWidget {
 /// This is the private State class that goes with ListOfNotesWidget.
 class _ListOfNotesWidgetState extends State<ListOfNotesWidget> {
   final List<Note> _items = list;
+  List<Note> _filterItems = list;
 
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     final oddItemColor = colorScheme.primary.withOpacity(0.05);
     final evenItemColor = colorScheme.primary.withOpacity(0.15);
 
-    return ReorderableListView(
-      padding: const EdgeInsets.symmetric(horizontal: 40),
-      children: <Widget>[
-        for (int index = 0; index < _items.length; index++)
-          Card(
-            key: Key('$index'),
-            child: ListTile(
-              tileColor: _items[index].isOdd ? oddItemColor : evenItemColor,
-              onTap: () => GestureTapCallback,
-              leading: Icon(Icons.notes_rounded),
-              trailing: Icon(Icons.delete),
-              title: Text('Item ${_items[index]}'),
-              subtitle: Text('Item description ${_items[index]}'),
+    return ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 40),
+        children: <Widget>[
+          TextField(
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.all(10),
+              hintText: 'Search through note',
             ),
+            onChanged: (string) {
+              setState(() {
+                _filterItems = _items
+                    .where((element) =>
+                        element.content
+                            .toLowerCase()
+                            .contains(string.toLowerCase()) ||
+                        element.title
+                            .toLowerCase()
+                            .contains(string.toLowerCase()))
+                    .toList();
+              });
+            },
           ),
-      ],
-      onReorder: (int oldIndex, int newIndex) {
-        setState(() {
-          if (oldIndex < newIndex) {
-            newIndex -= 1;
-          }
-          final Note item = _items.removeAt(oldIndex);
-          _items.insert(newIndex, item);
-        });
-      },
-    );
+          for (int index = 0; index < _filterItems.length; index++)
+            Card(
+              key: Key('$index'),
+              child: ListTile(
+                tileColor:
+                    _filterItems[index].isOdd ? oddItemColor : evenItemColor,
+                onTap: () => GestureTapCallback,
+                leading: Icon(Icons.notes_rounded),
+                trailing: Icon(Icons.delete),
+                title: Text(_filterItems[index].title),
+                subtitle: Text(_filterItems[index].content),
+              ),
+            ),
+        ]);
   }
 }

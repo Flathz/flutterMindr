@@ -23,6 +23,7 @@ class Tabs extends StatelessWidget {
               child: AddNoteWidget(),
             ),
             Center(
+              //child: Search().build(context),
               child: ListOfNotesWidget(),
             )
           ],
