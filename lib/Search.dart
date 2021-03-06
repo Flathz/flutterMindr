@@ -1,55 +1,13 @@
-import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_app/ListOfNotesWidget.dart';
 import 'package:search_widget/search_widget.dart';
 
+import 'MOCK.dart';
 import 'models/Note.dart';
 
-// Sets a platform override for desktop to avoid exceptions. See
-// https://flutter.dev/desktop#target-platform-override for more info.
-void enablePlatformOverrideForDesktop() {
-  if (!kIsWeb && (Platform.isMacOS || Platform.isWindows || Platform.isLinux)) {
-    debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia;
-  }
-}
-
-void main() {
-  enablePlatformOverrideForDesktop();
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Search Widget',
-      theme: ThemeData(
-        primarySwatch: Colors.blueGrey,
-      ),
-      debugShowCheckedModeBanner: false,
-      home: HomePage(),
-    );
-  }
-}
-
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  List<Note> list = <Note>[
-    Note("Note1", "Allo"),
-    Note("Note2", "comment"),
-    Note("Note3", "va"),
-    Note("Note4", "tu"),
-    Note("Note5", "aujourd'hui"),
-    Note("Note6", "mon"),
-    Note("Note7", "brave"),
-  ];
-
+class Search extends State<ListOfNotesWidget> {
   Note _selectedItem;
 
   bool _show = true;
