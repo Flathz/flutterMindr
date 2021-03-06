@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'MOCK.dart';
 import 'models/Note.dart';
+import 'package:flutter_app/db_helper.dart';
 
 /// This is the stateful widget that the main application instantiates.
 class ListOfNotesWidget extends StatefulWidget {
@@ -13,8 +13,21 @@ class ListOfNotesWidget extends StatefulWidget {
 
 /// This is the private State class that goes with ListOfNotesWidget.
 class _ListOfNotesWidgetState extends State<ListOfNotesWidget> {
-  final List<Note> _items = list;
-  List<Note> _filterItems = list;
+  DBHelper dbHelper;
+  List<Note> _items = [];
+  List<Note> _filterItems = [];
+
+  @override
+  void initState() {
+    super.initState();
+    dbHelper = DBHelper();
+    dbHelper.getNotes().then((value) {
+      setState(() {
+        _items = value;
+        _filterItems = _items;
+      });
+    });
+  }
 
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
