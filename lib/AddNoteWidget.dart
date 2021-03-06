@@ -1,39 +1,33 @@
-import 'package:flutter/cupertino.dart';
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/db_helper.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_app/db_helper.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
+
 import 'models/Note.dart';
 
 class AddNoteWidget extends StatefulWidget {
-  AddNoteWidget({Key key}) : super(key: key);
-
   @override
-  _AddNoteWidget createState() => _AddNoteWidget();
+  _AddNoteWidgetState createState() => _AddNoteWidgetState();
 }
 
-class _AddNoteWidget extends State<AddNoteWidget> {
-  final _formKey = GlobalKey<FormState>();
+class _AddNoteWidgetState extends State<AddNoteWidget> {
+  stt.SpeechToText _speech;
+  bool _isListening = false;
   DBHelper dbHelper;
-  final content = TextEditingController();
-  List<Note> allNotes = [];
+  String _text = 'Press the button and start speaking';
 
   @override
   void initState() {
     super.initState();
     dbHelper = DBHelper();
-  }
-
-  @override
-  void dispose() {
-    // Clean up the controller when the widget is disposed.
-    content.dispose();
-    super.dispose();
+    _speech = stt.SpeechToText();
   }
 
   addNote() {
     var count = 0;
     var title = "Note " + count.toString();
-    var note = Note(null, title, content.text,
+    var note = Note(null, title, _text,
         DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now()));
     dbHelper.add(note);
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -42,40 +36,81 @@ class _AddNoteWidget extends State<AddNoteWidget> {
     ));
   }
 
+  @override
   Widget build(BuildContext context) {
-    // Build a Form widget using the _formKey created above.
-    return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Container(
-              margin: EdgeInsets.only(top: 200, left: 30, right: 30),
-              child: TextFormField(
-                controller: content,
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Please enter some text';
-                  }
-                  return null;
-                },
-              )),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: Center(
-                child: FloatingActionButton(
-              onPressed: () {
-                if (_formKey.currentState.validate()) {
-                  _formKey.currentState.save();
-                  addNote();
-                  content.text = "";
-                }
-              },
-              child: Icon(Icons.add),
-            )),
+    return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: Padding(
+          padding: const EdgeInsets.all(40),
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                FloatingActionButton(
+                  onPressed: () {},
+                  child: Icon(Icons.keyboard),
+                ),
+                AvatarGlow(
+                  animate: _isListening,
+                  glowColor: Theme.of(context).primaryColor,
+                  endRadius: 100.0,
+                  duration: const Duration(milliseconds: 2000),
+                  repeatPauseDuration: const Duration(milliseconds: 100),
+                  repeat: true,
+                  child: SizedBox(
+                      width: 130,
+                      height: 130,
+                      child: FloatingActionButton(
+                        onPressed: _listen,
+                        child: Icon(
+                          _isListening ? Icons.mic : Icons.mic_none,
+                          size: 60,
+                        ),
+                      )),
+                ),
+                FloatingActionButton(
+                  onPressed: () {
+                    addNote();
+                    setState(() {
+                      _text = "";
+                    });
+                  },
+                  child: Icon(Icons.add),
+                )
+              ])),
+      body: SingleChildScrollView(
+        reverse: true,
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 150.0),
+          child: Text(
+            _text,
+            style: TextStyle(
+              fontSize: 32.0,
+              color: Colors.black,
+              fontWeight: FontWeight.w400,
+            ),
           ),
-        ],
+        ),
       ),
     );
+  }
+
+  void _listen() async {
+    if (!_isListening) {
+      bool available = await _speech.initialize(
+        onStatus: (val) => print('onStatus: $val'),
+        onError: (val) => print('onError: $val'),
+      );
+      if (available) {
+        setState(() => _isListening = true);
+        _speech.listen(
+          onResult: (val) => setState(() {
+            _text = val.recognizedWords;
+          }),
+        );
+      }
+    } else {
+      setState(() => _isListening = false);
+      _speech.stop();
+    }
   }
 }
