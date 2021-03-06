@@ -37,25 +37,37 @@ class _ListOfNotesWidgetState extends State<ListOfNotesWidget> {
     return ListView(
         padding: const EdgeInsets.symmetric(horizontal: 40),
         children: <Widget>[
-          TextField(
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.all(10),
-              hintText: 'Search through note',
-            ),
-            onChanged: (string) {
-              setState(() {
-                _filterItems = _items
-                    .where((element) =>
-                        element.content
-                            .toLowerCase()
-                            .contains(string.toLowerCase()) ||
-                        element.title
-                            .toLowerCase()
-                            .contains(string.toLowerCase()))
-                    .toList();
-              });
-            },
-          ),
+          Padding(
+              padding: const EdgeInsets.only(
+                left: 40,
+                top: 20,
+                right: 40,
+                bottom: 20,
+              ),
+              child: TextField(
+                decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.search),
+                    contentPadding: EdgeInsets.all(10),
+                    hintText: 'Search through note',
+                    fillColor: Colors.white,
+                    border: new OutlineInputBorder(
+                      borderRadius: new BorderRadius.circular(25.0),
+                      borderSide: new BorderSide(),
+                    )),
+                onChanged: (string) {
+                  setState(() {
+                    _filterItems = _items
+                        .where((element) =>
+                            element.content
+                                .toLowerCase()
+                                .contains(string.toLowerCase()) ||
+                            element.title
+                                .toLowerCase()
+                                .contains(string.toLowerCase()))
+                        .toList();
+                  });
+                },
+              )),
           for (int index = 0; index < _filterItems.length; index++)
             Card(
               key: Key('$index'),
