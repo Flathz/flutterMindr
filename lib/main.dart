@@ -1,8 +1,7 @@
 /// Flutter code sample for ReorderableListView
 
 import 'package:flutter/material.dart';
-
-import 'ListOfNotesWidget.dart';
+import 'package:flutter_app/Tabs.dart';
 
 void main() => runApp(MyApp());
 
@@ -14,9 +13,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: _title,
+      color: Theme.of(context).colorScheme.primary,
       home: Scaffold(
         appBar: AppBar(title: const Text(_title)),
-        body: ListOfNotesWidget(),
+        body: Tabs(),
       ),
     );
   }
