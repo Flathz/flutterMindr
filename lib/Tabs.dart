@@ -1,9 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/ListOfNotesWidget.dart';
-import 'package:search_widget/search_widget.dart';
-
-import 'Search.dart';
 
 class Tabs extends StatelessWidget {
   @override
@@ -25,7 +22,8 @@ class Tabs extends StatelessWidget {
               child: Text('Add a note'),
             ),
             Center(
-              child: Search().build(context),
+              //child: Search().build(context),
+              child: ListOfNotesWidget(),
             )
           ],
         ),
