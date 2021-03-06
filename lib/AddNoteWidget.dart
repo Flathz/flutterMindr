@@ -31,8 +31,13 @@ class _AddNoteWidget extends State<AddNoteWidget> {
   }
 
   addNote() {
-    var count = 0;
-    var title = "Note " + count.toString();
+    dbHelper.getNotes().then((value) {
+      setState(() {
+        allNotes = value.toList();
+      });
+    });
+    int length = allNotes.length + 1;
+    var title = "Note " + length.toString();
     var note = Note(null, title, content.text,
         DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now()));
     dbHelper.add(note);
