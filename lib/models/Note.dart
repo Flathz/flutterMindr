@@ -1,15 +1,20 @@
 class Note {
-  Note(this.id, this.title, this.description);
-
+  Note(this.id, this.title, this.content);
   int id;
   String title;
-  String description;
+  String content;
 
-    Map<String, dynamic> toMap() {
+  get isOdd => this.id % 2 == 1;
+
+  getId() {
+    return this.id;
+  }
+
+      Map<String, dynamic> toMap() {
     var map = <String, dynamic>{
       'id': id,
       'title': title,
-      'description': description,
+      'content': content,
     };
     return map;
   }
@@ -17,6 +22,5 @@ class Note {
     Note.fromMap(Map<String, dynamic> map) {
     id = map['id'];
     title = map['title'];
-    description = map['description'];
-  }
+    content = map['content'];
 }

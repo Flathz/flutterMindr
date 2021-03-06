@@ -1,12 +1,13 @@
-import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_app/ListOfNotesWidget.dart';
 import 'package:search_widget/search_widget.dart';
 
+import 'MOCK.dart';
 import 'models/Note.dart';
 
+<<<<<<< HEAD
 // Sets a platform override for desktop to avoid exceptions. See
 // https://flutter.dev/desktop#target-platform-override for more info.
 void enablePlatformOverrideForDesktop() {
@@ -50,6 +51,9 @@ class _HomePageState extends State<HomePage> {
     Note(7,"Note7", "brave"),
   ];
 
+=======
+class Search extends State<ListOfNotesWidget> {
+>>>>>>> fbcc08af4db8e6e6fd6a8349e8527a33e43d2c36
   Note _selectedItem;
 
   bool _show = true;
