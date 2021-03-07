@@ -17,6 +17,7 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
   bool _isListening = false;
   DBHelper dbHelper;
   String _text = 'Press the button and start speaking';
+  String init;
   List<Note> allNotes = [];
   bool _isEditingText = false;
   TextEditingController _editingController;
@@ -28,6 +29,7 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
     dbHelper = DBHelper();
     _speech = stt.SpeechToText();
     _editingController = TextEditingController(text: _text);
+    init = _text;
 
     KeyboardVisibilityNotification().addNewListener(
       onChange: (bool visible) {
@@ -73,7 +75,8 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
         body: new GestureDetector(
           onTap: () {
             setState(() {
-              FocusScope.of(context).requestFocus(new FocusNode());
+              if (!FocusScope.of(context).hasPrimaryFocus)
+                FocusScope.of(context).unfocus();
               _isEditingText = false;
             });
           },
@@ -90,10 +93,9 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
     if (_isEditingText)
       return Center(
         child: TextField(
-          onSubmitted: (newValue) {
+          onChanged: (newValue) {
             setState(() {
               _text = newValue;
-              _isEditingText = false;
             });
           },
           autofocus: true,
@@ -111,6 +113,10 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
         onTap: () {
           setState(() {
             _isEditingText = true;
+            if (_text == init) {
+              _text = "";
+              _editingController = TextEditingController(text: _text);
+            }
           });
         },
         child: Text(
@@ -182,6 +188,7 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
         _speech.listen(
           onResult: (val) => setState(() {
             _text = val.recognizedWords;
+            _editingController = TextEditingController(text: _text);
           }),
         );
       }
