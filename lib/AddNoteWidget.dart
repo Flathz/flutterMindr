@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_app/db_helper.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'package:keyboard_visibility/keyboard_visibility.dart';
 
 import 'models/Note.dart';
 
@@ -17,12 +18,30 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
   DBHelper dbHelper;
   String _text = 'Press the button and start speaking';
   List<Note> allNotes = [];
+  bool _isEditingText = false;
+  TextEditingController _editingController;
+  bool keyboardOpen = false;
 
   @override
   void initState() {
     super.initState();
     dbHelper = DBHelper();
     _speech = stt.SpeechToText();
+    _editingController = TextEditingController(text: _text);
+
+    KeyboardVisibilityNotification().addNewListener(
+      onChange: (bool visible) {
+        setState(() {
+          keyboardOpen = visible;
+        });
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _editingController.dispose();
+    super.dispose();
   }
 
   addNote() {
@@ -45,59 +64,111 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Padding(
-          padding: const EdgeInsets.all(40),
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                FloatingActionButton(
-                  onPressed: () {},
-                  child: Icon(Icons.keyboard),
-                ),
-                AvatarGlow(
-                  animate: _isListening,
-                  glowColor: Theme.of(context).primaryColor,
-                  endRadius: 100.0,
-                  duration: const Duration(milliseconds: 2000),
-                  repeatPauseDuration: const Duration(milliseconds: 100),
-                  repeat: true,
-                  child: SizedBox(
-                      width: 130,
-                      height: 130,
-                      child: FloatingActionButton(
-                        onPressed: _listen,
-                        child: Icon(
-                          _isListening ? Icons.mic : Icons.mic_none,
-                          size: 60,
-                        ),
-                      )),
-                ),
-                FloatingActionButton(
-                  onPressed: () {
-                    addNote();
-                    setState(() {
-                      _text = "";
-                    });
-                  },
-                  child: Icon(Icons.add),
-                )
-              ])),
-      body: SingleChildScrollView(
-        reverse: true,
-        child: Container(
-          padding: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 150.0),
-          child: Text(
-            _text,
-            style: TextStyle(
-              fontSize: 32.0,
-              color: Colors.black,
-              fontWeight: FontWeight.w400,
-            ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: Padding(
+            padding: const EdgeInsets.all(40),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: _showButtons())),
+        body: new GestureDetector(
+          onTap: () {
+            setState(() {
+              FocusScope.of(context).requestFocus(new FocusNode());
+              _isEditingText = false;
+            });
+          },
+          child: SingleChildScrollView(
+            reverse: true,
+            child: Container(
+                padding: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 150.0),
+                child: _editTitleTextField()),
+          ),
+        ));
+  }
+
+  Widget _editTitleTextField() {
+    if (_isEditingText)
+      return Center(
+        child: TextField(
+          onSubmitted: (newValue) {
+            setState(() {
+              _text = newValue;
+              _isEditingText = false;
+            });
+          },
+          autofocus: true,
+          controller: _editingController,
+          keyboardType: TextInputType.multiline,
+          maxLines: null,
+          style: TextStyle(
+            fontSize: 32.0,
+            color: Colors.black,
+            fontWeight: FontWeight.w400,
           ),
         ),
-      ),
-    );
+      );
+    return InkWell(
+        onTap: () {
+          setState(() {
+            _isEditingText = true;
+          });
+        },
+        child: Text(
+          _text,
+          style: TextStyle(
+            fontSize: 32.0,
+            color: Colors.black,
+            fontWeight: FontWeight.w400,
+          ),
+        ));
+  }
+
+  List<Widget> _showButtons() {
+    return !keyboardOpen
+        ? <Widget>[
+            FloatingActionButton(
+              onPressed: () {},
+              child: Icon(Icons.keyboard),
+            ),
+            AvatarGlow(
+              animate: _isListening,
+              glowColor: Theme.of(context).primaryColor,
+              endRadius: 100.0,
+              duration: const Duration(milliseconds: 2000),
+              repeatPauseDuration: const Duration(milliseconds: 100),
+              repeat: true,
+              child: SizedBox(
+                  width: 130,
+                  height: 130,
+                  child: FloatingActionButton(
+                    onPressed: _listen,
+                    child: Icon(
+                      _isListening ? Icons.mic : Icons.mic_none,
+                      size: 60,
+                    ),
+                  )),
+            ),
+            FloatingActionButton(
+              onPressed: () {
+                addNote();
+                setState(() {
+                  _text = 'Press the button and start speaking';
+                });
+              },
+              child: Icon(Icons.add),
+            )
+          ]
+        : <Widget>[
+            FloatingActionButton(
+              onPressed: () {
+                addNote();
+                setState(() {
+                  _text = 'Press the button and start speaking';
+                });
+              },
+              child: Icon(Icons.add),
+            )
+          ];
   }
 
   void _listen() async {
