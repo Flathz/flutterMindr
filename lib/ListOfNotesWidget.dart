@@ -43,82 +43,107 @@ class _ListOfNotesWidgetState extends State<ListOfNotesWidget> {
     refreshList();
   }
 
+  String truncateWithEllipsis(int cutoff, String myString) {
+    return (myString.length <= cutoff)
+        ? myString
+        : '${myString.substring(0, cutoff)}...';
+  }
+
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     final oddItemColor = colorScheme.primary.withOpacity(0.05);
     final evenItemColor = colorScheme.primary.withOpacity(0.15);
 
     return ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 40),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         children: <Widget>[
           Padding(
               padding: const EdgeInsets.only(
-                left: 40,
+                left: 10,
                 top: 20,
-                right: 40,
+                right: 10,
                 bottom: 20,
               ),
-              child: TextField(
-                decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.search),
-                    contentPadding: EdgeInsets.all(10),
-                    hintText: 'Search through note',
-                    fillColor: Colors.white,
-                    border: new OutlineInputBorder(
+              child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
                       borderRadius: new BorderRadius.circular(25.0),
-                      borderSide: new BorderSide(),
-                    )),
-                onChanged: (string) {
-                  setState(() {
-                    _filterItems = _items
-                        .where((element) =>
-                            element.content
-                                .toLowerCase()
-                                .contains(string.toLowerCase()) ||
-                            element.title
-                                .toLowerCase()
-                                .contains(string.toLowerCase()))
-                        .toList();
-                  });
-                },
-              )),
-          for (int index = 0; index < _filterItems.length; index++)
-            Card(
-              key: Key('$index'),
-              child: ListTile(
-                tileColor:
-                    _filterItems[index].isOdd ? oddItemColor : evenItemColor,
-                onTap: () => GestureTapCallback,
-                leading: Icon(Icons.notes_rounded),
-                trailing: GestureDetector(
-                    onTap: () {
-                      return showDialog(
-                        context: context,
-                        builder: (ctx) => AlertDialog(
-                          title: Text("Delete ?"),
-                          content: Text("Do you want to delete this note ?"),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () {
-                                deleteNote(_filterItems[index].id);
-                                Navigator.of(ctx).pop();
-                              },
-                              child: Text("Yes"),
-                            ),
-                            TextButton(
-                                onPressed: () {
-                                  Navigator.of(ctx).pop();
-                                },
-                                child: Text("No"))
-                          ],
-                        ),
-                      );
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey,
+                          blurRadius: 5.0,
+                          offset: const Offset(0, 5),
+                        )
+                      ]),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.search),
+                      contentPadding: EdgeInsets.all(15),
+                      hintText: 'Search through note',
+                      fillColor: Colors.white,
+                      border: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                    ),
+                    onChanged: (string) {
+                      setState(() {
+                        _filterItems = _items
+                            .where((element) =>
+                                element.content
+                                    .toLowerCase()
+                                    .contains(string.toLowerCase()) ||
+                                element.title
+                                    .toLowerCase()
+                                    .contains(string.toLowerCase()))
+                            .toList();
+                      });
                     },
-                    child: Icon(Icons.delete)),
-                title: Text(_filterItems[index].title),
-                subtitle: Text(_filterItems[index].content),
-              ),
-            ),
+                  ))),
+          for (int index = 0; index < _filterItems.length; index++)
+            Container(
+                height: 100,
+                child: Card(
+                  key: Key('$index'),
+                  child: ListTile(
+                    tileColor: _filterItems[index].isOdd
+                        ? oddItemColor
+                        : evenItemColor,
+                    onTap: () => GestureTapCallback,
+                    leading: Icon(Icons.notes_rounded),
+                    trailing: GestureDetector(
+                        onTap: () {
+                          return showDialog(
+                            context: context,
+                            builder: (ctx) => AlertDialog(
+                              title: Text("Delete ?"),
+                              content:
+                                  Text("Do you want to delete this note ?"),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    deleteNote(_filterItems[index].id);
+                                    Navigator.of(ctx).pop();
+                                  },
+                                  child: Text("Yes"),
+                                ),
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.of(ctx).pop();
+                                    },
+                                    child: Text("No"))
+                              ],
+                            ),
+                          );
+                        },
+                        child: Icon(Icons.delete)),
+                    title: Text(
+                        truncateWithEllipsis(50, _filterItems[index].title)),
+                    subtitle: Text(
+                        truncateWithEllipsis(50, _filterItems[index].content)),
+                  ),
+                )),
         ]);
   }
 }
