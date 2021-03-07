@@ -55,7 +55,7 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
     int length = allNotes.length + 1;
     var title = "Note " + length.toString();
     var note = Note(null, title, _text,
-        DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now()));
+        DateFormat('dd-MM-yyyy – kk:mm').format(DateTime.now()));
     dbHelper.add(note);
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text('Note ajouté !'),
@@ -158,7 +158,7 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
               onPressed: () {
                 addNote();
                 setState(() {
-                  _text = 'Press the button and start speaking';
+                  _text = init;
                 });
               },
               child: Icon(Icons.add),
@@ -169,7 +169,7 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
               onPressed: () {
                 addNote();
                 setState(() {
-                  _text = 'Press the button and start speaking';
+                  _text = init;
                 });
               },
               child: Icon(Icons.add),

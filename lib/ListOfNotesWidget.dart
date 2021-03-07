@@ -115,7 +115,11 @@ class _ListOfNotesWidgetState extends State<ListOfNotesWidget> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => NoteDetail()));
+                            builder: (context) => NoteDetail(),
+                            settings: RouteSettings(
+                              arguments: _filterItems[index].id,
+                            ),
+                          ));
                     },
                     leading: Icon(Icons.notes_rounded),
                     trailing: GestureDetector(

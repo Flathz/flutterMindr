@@ -46,6 +46,16 @@ class DBHelper {
     return notes;
   }
 
+  Future<Note> getNote(int id) async {
+    var dbClient = await db;
+    List<Map> maps =
+        await dbClient.query('note', where: 'id = ?', whereArgs: [id]);
+    if (maps.length > 0)
+      return Note.fromMap(maps[0]);
+    else
+      return null;
+  }
+
   Future<int> delete(int id) async {
     var dbClient = await db;
     return await dbClient.delete(
