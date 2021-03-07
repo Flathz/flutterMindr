@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/NoteDetail.dart';
 import 'models/Note.dart';
 import 'package:flutter_app/db_helper.dart';
 
@@ -110,7 +111,12 @@ class _ListOfNotesWidgetState extends State<ListOfNotesWidget> {
                     tileColor: _filterItems[index].isOdd
                         ? oddItemColor
                         : evenItemColor,
-                    onTap: () => GestureTapCallback,
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NoteDetail()));
+                    },
                     leading: Icon(Icons.notes_rounded),
                     trailing: GestureDetector(
                         onTap: () {
