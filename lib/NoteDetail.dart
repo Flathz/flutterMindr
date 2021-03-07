@@ -20,7 +20,18 @@ class NoteDetailState extends State<NoteDetail> {
 
   @override
   Widget build(BuildContext context) {
-    // Build a Form widget using the _formKey created above.
-    return Text("salut");
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Note Detail"),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            // Navigate back to first route when tapped.
+          },
+          child: Text('Go back!'),
+        ),
+      ),
+    );
   }
 }
