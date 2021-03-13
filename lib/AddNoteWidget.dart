@@ -210,11 +210,11 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
         onError: (val) => print('onError: $val'),
       );
       if (available) {
-        _tempText = _text == init ? "" : _text;
+        _tempText = _text == init ? "" : _text + " ";
         setState(() => _isListening = true);
         _speech.listen(
           onResult: (val) => setState(() {
-            _text = _tempText + " " + val.recognizedWords;
+            _text = _tempText + val.recognizedWords;
             _editingController = TextEditingController(text: _text);
           }),
         );
