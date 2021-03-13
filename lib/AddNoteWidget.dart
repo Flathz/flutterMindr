@@ -48,20 +48,21 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
   }
 
   addNote() {
-    dbHelper.getNotes().then((value) {
-      setState(() {
-        allNotes = value.toList();
-      });
-    });
-    var title = _text.substring(0, 10) + '...';
-
-    var note = Note(null, title, _text,
-        DateFormat('dd-MM-yyyy – kk:mm').format(DateTime.now()));
-    dbHelper.add(note);
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text('Note ajouté !'),
-      duration: Duration(milliseconds: 500),
-    ));
+    if (_text == init || _text == "") {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Say or type something to add it to note'),
+        duration: Duration(milliseconds: 1000),
+      ));
+    } else {
+      var title = "Untitled note";
+      var note = Note(null, title, _text,
+          DateFormat('dd-MM-yyyy – kk:mm').format(DateTime.now()));
+      dbHelper.add(note);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Note ajouté !'),
+        duration: Duration(milliseconds: 500),
+      ));
+    }
   }
 
   @override
@@ -134,7 +135,9 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
     return !keyboardOpen
         ? <Widget>[
             FloatingActionButton(
-              onPressed: () {},
+              onPressed: () {
+                cancelNote();
+              },
               child: Icon(Icons.close),
             ),
             AvatarGlow(
@@ -169,6 +172,12 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
         : <Widget>[
             FloatingActionButton(
               onPressed: () {
+                cancelNote();
+              },
+              child: Icon(Icons.close),
+            ),
+            FloatingActionButton(
+              onPressed: () {
                 addNote();
                 setState(() {
                   FocusScope.of(context).requestFocus(FocusNode());
@@ -200,6 +209,42 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
     } else {
       setState(() => _isListening = false);
       _speech.stop();
+    }
+  }
+
+  cancelNote() {
+    if (_text == init) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Your note is already empty'),
+        duration: Duration(milliseconds: 1000),
+      ));
+    } else {
+      return showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text("Delete ?"),
+          content: Text("Do you want to delete your text ?"),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(ctx).pop();
+                setState(() {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  _isEditingText = false;
+                  _text = init;
+                  _editingController = TextEditingController(text: _text);
+                });
+              },
+              child: Text("Yes"),
+            ),
+            TextButton(
+                onPressed: () {
+                  Navigator.of(ctx).pop();
+                },
+                child: Text("No"))
+          ],
+        ),
+      );
     }
   }
 }
