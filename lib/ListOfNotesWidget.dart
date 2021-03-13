@@ -157,15 +157,4 @@ class _ListOfNotesWidgetState extends State<ListOfNotesWidget> {
                 )),
         ]);
   }
-
-  Future<void> goToDetail(index) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => NoteDetail(),
-          settings: RouteSettings(
-            arguments: _filterItems[index].id,
-          ),
-        ));
-  }
 }
