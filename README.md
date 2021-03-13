@@ -1,16 +1,24 @@
-# flutter_app
+# Mindr
 
-A new Flutter application.
+Note Taking Application
 
-## Getting Started
+## For Framework JS module
 
-This project is a starting point for a Flutter application.
+We implemented a web application thanks to PWA in flutter.
+You can check the visual by running the following command:
 
-A few resources to get you started if this is your first Flutter project:
+`flutter run -d chrome`
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+Mindr is a note-taking application that is designed to add vocal quick notes and to interact with them.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Our application is using the following plugins **which aren't supporting web yet:**
+
+Once the owner of the plugins update them for flutter 2.0 which is the latest version of flutter, our application will be fully viable for web too. 
+
+* https://pub.dev/packages/sqflite
+
+* https://pub.dev/packages/speech_to_text
+
+* https://pub.dev/packages/search_widget
+
+
