@@ -175,7 +175,7 @@ class NoteDetailState extends State<NoteDetail> {
           _isEditingText = false;
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text('Note updated !'),
-            duration: Duration(milliseconds: 50),
+            duration: Duration(milliseconds: 1000),
           ));
         },
         child: const Icon(Icons.done),
