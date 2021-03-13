@@ -24,6 +24,7 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
   bool _isEditingText = false;
   TextEditingController _editingController;
   bool keyboardOpen = false;
+  FocusNode isTyping;
 
   @override
   void initState() {
@@ -32,6 +33,7 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
     _speech = stt.SpeechToText();
     _editingController = TextEditingController(text: _text);
     init = _text;
+    isTyping = FocusNode();
 
     KeyboardVisibilityNotification().addNewListener(
       onChange: (bool visible) {
@@ -45,6 +47,7 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
   @override
   void dispose() {
     _editingController.dispose();
+    isTyping.dispose();
     super.dispose();
   }
 
@@ -78,9 +81,10 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
         body: new GestureDetector(
           onTap: () {
             setState(() {
-              if (!FocusScope.of(context).hasPrimaryFocus)
+              if (!FocusScope.of(context).hasPrimaryFocus) {
                 FocusScope.of(context).requestFocus(FocusNode());
-              _isEditingText = false;
+                _isEditingText = false;
+              }
             });
           },
           child: SingleChildScrollView(
@@ -96,6 +100,7 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
     if (_isEditingText)
       return Center(
         child: TextField(
+          focusNode: isTyping,
           onChanged: (newValue) {
             setState(() {
               _text = newValue;
@@ -127,6 +132,7 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
             if (_text == init) {
               _text = "";
               _editingController = TextEditingController(text: _text);
+              isTyping.requestFocus();
             }
           });
         },
