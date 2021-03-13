@@ -19,6 +19,7 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
   String _text =
       'Press the button and start speaking or click on text to write something';
   String init;
+  String _tempText;
   List<Note> allNotes = [];
   bool _isEditingText = false;
   TextEditingController _editingController;
@@ -59,7 +60,7 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
           DateFormat('dd-MM-yyyy – kk:mm').format(DateTime.now()));
       dbHelper.add(note);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Note ajouté !'),
+        content: Text('Note added !'),
         duration: Duration(milliseconds: 500),
       ));
     }
@@ -78,7 +79,7 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
           onTap: () {
             setState(() {
               if (!FocusScope.of(context).hasPrimaryFocus)
-                FocusScope.of(context).unfocus();
+                FocusScope.of(context).requestFocus(FocusNode());
               _isEditingText = false;
             });
           },
@@ -100,6 +101,13 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
               _text = newValue;
             });
           },
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            enabledBorder: InputBorder.none,
+            errorBorder: InputBorder.none,
+            disabledBorder: InputBorder.none,
+          ),
           autofocus: true,
           controller: _editingController,
           keyboardType: TextInputType.multiline,
@@ -107,7 +115,8 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
           style: TextStyle(
             fontSize: 32.0,
             color: Colors.black,
-            fontWeight: FontWeight.w400,
+            fontFamily: 'ZillaSlab',
+            fontWeight: FontWeight.w500,
           ),
         ),
       );
@@ -126,7 +135,8 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
           style: TextStyle(
             fontSize: 32.0,
             color: Colors.black,
-            fontWeight: FontWeight.w400,
+            fontFamily: 'ZillaSlab',
+            fontWeight: FontWeight.w500,
           ),
         ));
   }
@@ -162,6 +172,8 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
               onPressed: () {
                 addNote();
                 setState(() {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  _isEditingText = false;
                   _text = init;
                   _editingController = TextEditingController(text: _text);
                 });
@@ -198,10 +210,11 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
         onError: (val) => print('onError: $val'),
       );
       if (available) {
+        _tempText = _text;
         setState(() => _isListening = true);
         _speech.listen(
           onResult: (val) => setState(() {
-            _text = val.recognizedWords;
+            _text = _tempText + " " + val.recognizedWords;
             _editingController = TextEditingController(text: _text);
           }),
         );
