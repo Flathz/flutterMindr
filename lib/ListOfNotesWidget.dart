@@ -111,8 +111,8 @@ class _ListOfNotesWidgetState extends State<ListOfNotesWidget> {
                     tileColor: _filterItems[index].isOdd
                         ? oddItemColor
                         : evenItemColor,
-                    onTap: () {
-                      Navigator.push(
+                    onTap: () async {
+                      await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => NoteDetail(),
@@ -120,6 +120,7 @@ class _ListOfNotesWidgetState extends State<ListOfNotesWidget> {
                               arguments: _filterItems[index].id,
                             ),
                           ));
+                      refreshList();
                     },
                     leading: Icon(Icons.notes_rounded),
                     trailing: GestureDetector(
@@ -155,5 +156,16 @@ class _ListOfNotesWidgetState extends State<ListOfNotesWidget> {
                   ),
                 )),
         ]);
+  }
+
+  Future<void> goToDetail(index) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => NoteDetail(),
+          settings: RouteSettings(
+            arguments: _filterItems[index].id,
+          ),
+        ));
   }
 }

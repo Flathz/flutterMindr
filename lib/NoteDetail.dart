@@ -58,7 +58,7 @@ class NoteDetailState extends State<NoteDetail> {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 24, top: 80),
                         child: Text(
-                          note.date,
+                          note == null ? "" : note.date,
                           style: TextStyle(
                               fontWeight: FontWeight.w500,
                               color: Colors.grey.shade500),
@@ -68,8 +68,8 @@ class NoteDetailState extends State<NoteDetail> {
                     Padding(
                       padding: const EdgeInsets.only(
                           left: 24.0, top: 36, bottom: 24, right: 24),
-                      child: _editNote(
-                          note.content, _editingContentController, false),
+                      child: _editNote(note == null ? "" : note.content,
+                          _editingContentController, false),
                     )
                   ],
                 ),
@@ -94,8 +94,10 @@ class NoteDetailState extends State<NoteDetail> {
                                     curve: Curves.easeIn,
                                     child: SizedBox(
                                         width: 250.0,
-                                        child: _editNote(note.title,
-                                            _editingTitleController, true)),
+                                        child: _editNote(
+                                            note == null ? "" : note.title,
+                                            _editingTitleController,
+                                            true)),
                                   ),
                                   Spacer(),
                                   IconButton(
@@ -131,11 +133,6 @@ class NoteDetailState extends State<NoteDetail> {
       return TextField(
         decoration: InputDecoration(
           contentPadding: EdgeInsets.all(0),
-          border: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          enabledBorder: InputBorder.none,
-          errorBorder: InputBorder.none,
-          disabledBorder: InputBorder.none,
         ),
         controller: controller,
         keyboardType: isTitle ? TextInputType.text : TextInputType.multiline,
@@ -149,19 +146,21 @@ class NoteDetailState extends State<NoteDetail> {
               )
             : TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
       );
-    return Text(
-      text,
-      overflow: !isTitle ? TextOverflow.visible : TextOverflow.ellipsis,
-      softWrap: true,
-      style: isTitle
-          ? TextStyle(
-              fontSize: 32.0,
-              color: Colors.black,
-              fontFamily: 'ZillaSlab',
-              fontWeight: FontWeight.w500,
-            )
-          : TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-    );
+    return Container(
+        padding: EdgeInsets.all(0),
+        child: Text(
+          text,
+          overflow: !isTitle ? TextOverflow.visible : TextOverflow.ellipsis,
+          softWrap: true,
+          style: isTitle
+              ? TextStyle(
+                  fontSize: 32.0,
+                  color: Colors.black,
+                  fontFamily: 'ZillaSlab',
+                  fontWeight: FontWeight.w500,
+                )
+              : TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+        ));
   }
 
   Widget displayButton() {
