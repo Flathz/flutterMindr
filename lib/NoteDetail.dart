@@ -25,6 +25,10 @@ class NoteDetailState extends State<NoteDetail> {
     dbHelper = DBHelper();
   }
 
+  deleteNote(id) {
+    dbHelper.delete(id);
+  }
+
   Note getNote(id) {
     Future<Note> result = dbHelper.getNote(id);
     result.then((value) {
@@ -102,7 +106,31 @@ class NoteDetailState extends State<NoteDetail> {
                                   Spacer(),
                                   IconButton(
                                     icon: Icon(Icons.delete_outline),
-                                    onPressed: () => {},
+                                    onPressed: () {
+                                      return showDialog(
+                                        context: context,
+                                        builder: (ctx) => AlertDialog(
+                                          title: Text("Delete ?"),
+                                          content: Text(
+                                              "Do you want to delete this note ?"),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              onPressed: () {
+                                                deleteNote(noteId);
+                                                Navigator.of(ctx).pop(true);
+                                                Navigator.of(context).pop(true);
+                                              },
+                                              child: Text("Yes"),
+                                            ),
+                                            TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(ctx).pop(true);
+                                                },
+                                                child: Text("No"))
+                                          ],
+                                        ),
+                                      );
+                                    },
                                   ),
                                   IconButton(
                                     icon: Icon(Icons.edit),
