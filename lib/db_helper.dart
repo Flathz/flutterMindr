@@ -16,7 +16,7 @@ class DBHelper {
   }
 
   initDatabase() async {
-    io.Directory documentDirectory = await getApplicationDocumentsDirectory();
+    io.Directory documentDirectory = await getExternalStorageDirectory();
     String path = join(documentDirectory.path, 'notes.db');
     var db = await openDatabase(path, version: 1, onCreate: _onCreate);
     return db;
