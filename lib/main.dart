@@ -1,5 +1,3 @@
-/// Flutter code sample for ReorderableListView
-
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Tabs.dart';
 
