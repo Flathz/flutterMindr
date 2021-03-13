@@ -17,7 +17,7 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
   bool _isListening = false;
   DBHelper dbHelper;
   String _text =
-      'Press the button and start speaking or click on text to write something';
+      'Press the button and start speaking or click on the text to write something.';
   String init;
   String _tempText;
   List<Note> allNotes = [];
@@ -51,8 +51,8 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
   addNote() {
     if (_text == init || _text == "") {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Say or type something to add it to note'),
-        duration: Duration(milliseconds: 1000),
+        content: Text('Say or type something to add it to the note.'),
+        duration: Duration(milliseconds: 2000),
       ));
     } else {
       var title = "Untitled note";
@@ -61,7 +61,7 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
       dbHelper.add(note);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Note added !'),
-        duration: Duration(milliseconds: 500),
+        duration: Duration(milliseconds: 1000),
       ));
     }
   }
