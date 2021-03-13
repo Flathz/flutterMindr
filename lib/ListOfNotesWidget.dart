@@ -80,7 +80,7 @@ class _ListOfNotesWidgetState extends State<ListOfNotesWidget> {
                     decoration: InputDecoration(
                       prefixIcon: Icon(Icons.search),
                       contentPadding: EdgeInsets.all(15),
-                      hintText: 'Search through note',
+                      hintText: 'Search through notes',
                       fillColor: Colors.white,
                       border: InputBorder.none,
                       focusedBorder: InputBorder.none,
