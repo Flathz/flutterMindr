@@ -4,7 +4,6 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/db_helper.dart';
-import 'package:intl/intl.dart';
 
 import 'models/Note.dart';
 
@@ -15,7 +14,6 @@ class NoteDetail extends StatefulWidget {
 
 class NoteDetailState extends State<NoteDetail> {
   DBHelper dbHelper;
-  final _formKey = GlobalKey<FormState>();
   Note note;
 
   @override

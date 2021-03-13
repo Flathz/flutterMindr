@@ -16,7 +16,8 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
   stt.SpeechToText _speech;
   bool _isListening = false;
   DBHelper dbHelper;
-  String _text = 'Press the button and start speaking';
+  String _text =
+      'Press the button and start speaking or click on text to write something';
   String init;
   List<Note> allNotes = [];
   bool _isEditingText = false;
@@ -134,7 +135,7 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
         ? <Widget>[
             FloatingActionButton(
               onPressed: () {},
-              child: Icon(Icons.keyboard),
+              child: Icon(Icons.close),
             ),
             AvatarGlow(
               animate: _isListening,
@@ -159,6 +160,7 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
                 addNote();
                 setState(() {
                   _text = init;
+                  _editingController = TextEditingController(text: _text);
                 });
               },
               child: Icon(Icons.add),
@@ -169,7 +171,10 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
               onPressed: () {
                 addNote();
                 setState(() {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  _isEditingText = false;
                   _text = init;
+                  _editingController = TextEditingController(text: _text);
                 });
               },
               child: Icon(Icons.add),
