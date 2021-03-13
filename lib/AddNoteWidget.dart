@@ -17,7 +17,7 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
   bool _isListening = false;
   DBHelper dbHelper;
   String _text =
-      'Press the button and start speaking or click on text to write something';
+      'Press the button and start speaking or click on the text to write something.';
   String init;
   String _tempText;
   List<Note> allNotes = [];
