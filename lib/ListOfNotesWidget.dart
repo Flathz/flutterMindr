@@ -102,6 +102,25 @@ class _ListOfNotesWidgetState extends State<ListOfNotesWidget> {
                       });
                     },
                   ))),
+          if (_filterItems.length == 0)
+            Container(
+                height: 500,
+                width: double.infinity,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Icon(
+                          Icons.no_sim_outlined,
+                          size: 100,
+                        )),
+                    Text(
+                      "You will see all your notes here",
+                      style: TextStyle(fontSize: 20.0),
+                    )
+                  ],
+                )),
           for (int index = 0; index < _filterItems.length; index++)
             Container(
                 height: 100,
