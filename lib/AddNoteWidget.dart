@@ -210,7 +210,7 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
         onError: (val) => print('onError: $val'),
       );
       if (available) {
-        _tempText = _text;
+        _tempText = _text == init ? "" : _text;
         setState(() => _isListening = true);
         _speech.listen(
           onResult: (val) => setState(() {
