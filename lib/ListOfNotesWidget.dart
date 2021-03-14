@@ -72,8 +72,8 @@ class _ListOfNotesWidgetState extends State<ListOfNotesWidget> {
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey,
-                          blurRadius: 5.0,
-                          offset: const Offset(0, 5),
+                          blurRadius: 3.0,
+                          offset: const Offset(0, 3),
                         )
                       ]),
                   child: TextField(
@@ -90,15 +90,16 @@ class _ListOfNotesWidgetState extends State<ListOfNotesWidget> {
                     ),
                     onChanged: (string) {
                       setState(() {
-                        _filterItems = _items
-                            .where((element) =>
-                                element.content
-                                    .toLowerCase()
-                                    .contains(string.toLowerCase()) ||
-                                element.title
-                                    .toLowerCase()
-                                    .contains(string.toLowerCase()))
-                            .toList();
+                        _filterItems = _items.where((element) {
+                          var temp = string.split(" ").where((e) => e != "");
+                          bool isIn = temp.every((e) => ((element.content
+                                      .toLowerCase()
+                                      .contains(e) ||
+                                  element.title.toLowerCase().contains(e)) &&
+                              e != ""));
+
+                          return isIn;
+                        }).toList();
                       });
                     },
                   ))),
@@ -123,8 +124,8 @@ class _ListOfNotesWidgetState extends State<ListOfNotesWidget> {
                 )),
           for (int index = 0; index < _filterItems.length; index++)
             Container(
-                height: 100,
-                child: Card(
+              height: 100,
+              child: Card(
                   key: Key('$index'),
                   child: ListTile(
                     tileColor: _filterItems[index].isOdd
@@ -141,7 +142,7 @@ class _ListOfNotesWidgetState extends State<ListOfNotesWidget> {
                           ));
                       refreshList();
                     },
-                    leading: Icon(Icons.notes_rounded),
+                    leading: Icon(Icons.note_outlined),
                     trailing: GestureDetector(
                         onTap: () {
                           return showDialog(
@@ -169,11 +170,19 @@ class _ListOfNotesWidgetState extends State<ListOfNotesWidget> {
                         },
                         child: Icon(Icons.delete)),
                     title: Text(
-                        truncateWithEllipsis(50, _filterItems[index].title)),
-                    subtitle: Text(
-                        truncateWithEllipsis(50, _filterItems[index].content)),
-                  ),
-                )),
+                        truncateWithEllipsis(30, _filterItems[index].title)),
+                    subtitle: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 0,
+                        top: 15,
+                        right: 0,
+                        bottom: 0,
+                      ),
+                      child: Text(truncateWithEllipsis(
+                          35, _filterItems[index].content)),
+                    ),
+                  )),
+            )
         ]);
   }
 }

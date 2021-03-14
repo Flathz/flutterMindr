@@ -32,6 +32,8 @@ dependencies:
   intl: ^0.17.0
   keyboard_visibility: any
   csv: ^4.1.0
+  downloads_path_provider: ^0.1.0
+  permission_handler: any
 
 dev_dependencies:
   flutter_test:

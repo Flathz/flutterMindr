@@ -9,16 +9,15 @@ class MyApp extends StatelessWidget {
   static const String _title = 'Mindr';
   final Csv csv = Csv();
 
-  Future<bool> handleClick(String value) async {
+  void handleClick(String value) async {
     switch (value) {
       case 'Export notes':
-        return csv.getCsv();
+        csv.getCsv();
         break;
       case 'Import notes':
-        return csv.importCsv();
+        csv.importCsv();
         break;
       default:
-        return false;
         break;
     }
   }
