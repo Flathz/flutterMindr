@@ -12,6 +12,7 @@ class Csv {
   List<Note> notes = [];
 
   Future<bool> getCsv() async {
+    bool isSaved = false;
     dbHelper = DBHelper();
     dbHelper.getNotes().then((value) {
       notes = value.reversed.toList();
@@ -32,8 +33,8 @@ class Csv {
     final String dir = (await DownloadsPathProvider.downloadsDirectory).path;
     final String path = '$dir/notes.csv';
     final File file = File(path);
-    await file.writeAsString(csv);
-    return true;
+    await file.writeAsString(csv).then((value) => isSaved = true);
+    return isSaved;
   }
 
   Future<bool> importCsv() async {
