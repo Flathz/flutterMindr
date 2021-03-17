@@ -28,6 +28,7 @@ class Csv {
     }
 
     String csv = const ListToCsvConverter().convert(csvData);
+    print(csv);
     final String dir = (await DownloadsPathProvider.downloadsDirectory).path;
     final String path = '$dir/notes.csv';
     final File file = File(path);

@@ -44,6 +44,23 @@ class _ListOfNotesWidgetState extends State<ListOfNotesWidget> {
     refreshList();
   }
 
+  void handleClick(String value) async {
+    switch (value) {
+      case 'Export notes':
+        //csv.getCsv();
+        break;
+      case 'Import notes':
+        //csv.importCsv();
+        break;
+      default:
+        break;
+    }
+  }
+
+  test() {
+    print('lol');
+  }
+
   String truncateWithEllipsis(int cutoff, String myString) {
     return (myString.length <= cutoff)
         ? myString
@@ -55,134 +72,142 @@ class _ListOfNotesWidgetState extends State<ListOfNotesWidget> {
     final oddItemColor = colorScheme.primary.withOpacity(0.05);
     final evenItemColor = colorScheme.primary.withOpacity(0.15);
 
-    return ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        children: <Widget>[
-          Padding(
-              padding: const EdgeInsets.only(
-                left: 10,
-                top: 20,
-                right: 10,
-                bottom: 20,
-              ),
-              child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: new BorderRadius.circular(25.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey,
-                          blurRadius: 3.0,
-                          offset: const Offset(0, 3),
-                        )
-                      ]),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.search),
-                      contentPadding: EdgeInsets.all(15),
-                      hintText: 'Search through notes',
-                      fillColor: Colors.white,
-                      border: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                    ),
-                    onChanged: (string) {
-                      setState(() {
-                        _filterItems = _items.where((element) {
-                          var temp = string.split(" ").where((e) => e != "");
-                          bool isIn = temp.every((e) => ((element.content
-                                      .toLowerCase()
-                                      .contains(e) ||
-                                  element.title.toLowerCase().contains(e)) &&
-                              e != ""));
+    return RefreshIndicator(
+        onRefresh: () async {
+          refreshList();
+          return await Future.delayed(Duration(seconds: 1));
+        },
+        displacement: 100,
+        child: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            children: <Widget>[
+              Padding(
+                  padding: const EdgeInsets.only(
+                    left: 10,
+                    top: 20,
+                    right: 10,
+                    bottom: 20,
+                  ),
+                  child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: new BorderRadius.circular(25.0),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey,
+                              blurRadius: 3.0,
+                              offset: const Offset(0, 3),
+                            )
+                          ]),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.search),
+                          contentPadding: EdgeInsets.all(15),
+                          hintText: 'Search through notes',
+                          fillColor: Colors.white,
+                          border: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                        ),
+                        onChanged: (string) {
+                          setState(() {
+                            _filterItems = _items.where((element) {
+                              var temp =
+                                  string.split(" ").where((e) => e != "");
+                              bool isIn = temp.every((e) =>
+                                  ((element.content.toLowerCase().contains(e) ||
+                                          element.title
+                                              .toLowerCase()
+                                              .contains(e)) &&
+                                      e != ""));
 
-                          return isIn;
-                        }).toList();
-                      });
-                    },
-                  ))),
-          if (_filterItems.length == 0)
-            Container(
-                height: 500,
-                width: double.infinity,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Icon(
-                          Icons.no_sim_outlined,
-                          size: 100,
-                        )),
-                    Text(
-                      "You will see all your notes here",
-                      style: TextStyle(fontSize: 20.0),
-                    )
-                  ],
-                )),
-          for (int index = 0; index < _filterItems.length; index++)
-            Container(
-              height: 100,
-              child: Card(
-                  key: Key('$index'),
-                  child: ListTile(
-                    tileColor: _filterItems[index].isOdd
-                        ? oddItemColor
-                        : evenItemColor,
-                    onTap: () async {
-                      await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => NoteDetail(),
-                            settings: RouteSettings(
-                              arguments: _filterItems[index].id,
-                            ),
-                          ));
-                      refreshList();
-                    },
-                    leading: Icon(Icons.note_outlined),
-                    trailing: GestureDetector(
-                        onTap: () {
-                          return showDialog(
-                            context: context,
-                            builder: (ctx) => AlertDialog(
-                              title: Text("Delete ?"),
-                              content:
-                                  Text("Do you want to delete this note ?"),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () {
-                                    deleteNote(_filterItems[index].id);
-                                    Navigator.of(ctx).pop();
-                                  },
-                                  child: Text("Yes"),
-                                ),
-                                TextButton(
-                                    onPressed: () {
-                                      Navigator.of(ctx).pop();
-                                    },
-                                    child: Text("No"))
-                              ],
-                            ),
-                          );
+                              return isIn;
+                            }).toList();
+                          });
                         },
-                        child: Icon(Icons.delete)),
-                    title: Text(
-                        truncateWithEllipsis(30, _filterItems[index].title)),
-                    subtitle: Padding(
-                      padding: const EdgeInsets.only(
-                        left: 0,
-                        top: 15,
-                        right: 0,
-                        bottom: 0,
-                      ),
-                      child: Text(truncateWithEllipsis(
-                          35, _filterItems[index].content)),
-                    ),
-                  )),
-            )
-        ]);
+                      ))),
+              if (_filterItems.length == 0)
+                Container(
+                    height: 500,
+                    width: double.infinity,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: Icon(
+                              Icons.no_sim_outlined,
+                              size: 100,
+                            )),
+                        Text(
+                          "You will see all your notes here",
+                          style: TextStyle(fontSize: 20.0),
+                        )
+                      ],
+                    )),
+              for (int index = 0; index < _filterItems.length; index++)
+                Container(
+                  height: 100,
+                  child: Card(
+                      key: Key('$index'),
+                      child: ListTile(
+                        tileColor: _filterItems[index].isOdd
+                            ? oddItemColor
+                            : evenItemColor,
+                        onTap: () async {
+                          await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => NoteDetail(),
+                                settings: RouteSettings(
+                                  arguments: _filterItems[index].id,
+                                ),
+                              ));
+                          refreshList();
+                        },
+                        leading: Icon(Icons.note_outlined),
+                        trailing: GestureDetector(
+                            onTap: () {
+                              return showDialog(
+                                context: context,
+                                builder: (ctx) => AlertDialog(
+                                  title: Text("Delete ?"),
+                                  content:
+                                      Text("Do you want to delete this note ?"),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        deleteNote(_filterItems[index].id);
+                                        Navigator.of(ctx).pop();
+                                      },
+                                      child: Text("Yes"),
+                                    ),
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.of(ctx).pop();
+                                        },
+                                        child: Text("No"))
+                                  ],
+                                ),
+                              );
+                            },
+                            child: Icon(Icons.delete)),
+                        title: Text(truncateWithEllipsis(
+                            30, _filterItems[index].title)),
+                        subtitle: Padding(
+                          padding: const EdgeInsets.only(
+                            left: 0,
+                            top: 15,
+                            right: 0,
+                            bottom: 0,
+                          ),
+                          child: Text(truncateWithEllipsis(
+                              35, _filterItems[index].content)),
+                        ),
+                      )),
+                )
+            ]));
   }
 }
