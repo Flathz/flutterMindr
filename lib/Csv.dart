@@ -1,22 +1,22 @@
 import 'dart:io';
 
 import 'package:downloads_path_provider/downloads_path_provider.dart';
-import 'package:path_provider/path_provider.dart';
 import 'models/Note.dart';
 import 'package:flutter_app/db_helper.dart';
 import 'package:csv/csv.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class Csv {
+  Csv(this.notes);
   DBHelper dbHelper;
-  List<Note> notes = [];
+  List<Note> notes;
 
   Future<bool> getCsv() async {
     bool isSaved = false;
-    dbHelper = DBHelper();
-    dbHelper.getNotes().then((value) {
-      notes = value.reversed.toList();
-    });
+    // dbHelper = DBHelper();
+    // dbHelper.getNotes().then((value) {
+    //   notes = value.reversed.toList();
+    // });
 
     List<List<String>> csvData = [
       <String>['Title', 'Content', 'Date'],

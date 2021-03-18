@@ -18,7 +18,7 @@ class _ListOfNotesWidgetState extends State<ListOfNotesWidget> {
   DBHelper dbHelper;
   List<Note> _items = [];
   List<Note> _filterItems = [];
-  final Csv csv = Csv();
+  Csv csv = null;
 
   @override
   void initState() {
@@ -27,6 +27,7 @@ class _ListOfNotesWidgetState extends State<ListOfNotesWidget> {
     dbHelper.getNotes().then((value) {
       setState(() {
         _items = value.reversed.toList();
+        csv = Csv(_items);
         _filterItems = _items;
       });
     });
