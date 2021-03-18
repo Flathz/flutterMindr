@@ -13,10 +13,6 @@ class Csv {
 
   Future<bool> getCsv() async {
     bool isSaved = false;
-    // dbHelper = DBHelper();
-    // dbHelper.getNotes().then((value) {
-    //   notes = value.reversed.toList();
-    // });
 
     List<List<String>> csvData = [
       <String>['Title', 'Content', 'Date'],
