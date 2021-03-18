@@ -161,6 +161,11 @@ class NoteDetailState extends State<NoteDetail> {
       return TextField(
         decoration: InputDecoration(
           contentPadding: EdgeInsets.all(0),
+          border: !isTitle ? InputBorder.none : null,
+          focusedBorder: !isTitle ? InputBorder.none : null,
+          enabledBorder: !isTitle ? InputBorder.none : null,
+          errorBorder: !isTitle ? InputBorder.none : null,
+          disabledBorder: !isTitle ? InputBorder.none : null,
         ),
         controller: controller,
         keyboardType: isTitle ? TextInputType.text : TextInputType.multiline,

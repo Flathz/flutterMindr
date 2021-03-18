@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Tabs.dart';
+import 'package:badges/badges.dart';
 
 void main() => runApp(MyApp());
 
@@ -14,7 +15,16 @@ class MyApp extends StatelessWidget {
       color: Theme.of(context).colorScheme.primary,
       home: Scaffold(
         appBar: AppBar(
-          title: const Text(_title),
+          title: Row(children: [
+            Text(_title),
+            Padding(
+                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                child: Chip(
+                  padding: EdgeInsets.all(0),
+                  backgroundColor: Colors.red,
+                  label: Text('Beta', style: TextStyle(color: Colors.white)),
+                )),
+          ]),
         ),
         body: Tabs(),
       ),
