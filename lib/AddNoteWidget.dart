@@ -79,21 +79,23 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: _showButtons())),
         body: new GestureDetector(
-          onTap: () {
-            setState(() {
-              if (!FocusScope.of(context).hasPrimaryFocus) {
-                FocusScope.of(context).requestFocus(FocusNode());
-                _isEditingText = false;
-              }
-            });
-          },
-          child: SingleChildScrollView(
-            reverse: true,
-            child: Container(
-                padding: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 150.0),
-                child: _editTitleTextField()),
-          ),
-        ));
+            onTap: () {
+              setState(() {
+                if (!FocusScope.of(context).hasPrimaryFocus) {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  _isEditingText = false;
+                }
+              });
+            },
+            child: SizedBox(
+              height: 540,
+              child: SingleChildScrollView(
+                //reverse: true,
+                child: Container(
+                    padding: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 150.0),
+                    child: _editTitleTextField()),
+              ),
+            )));
   }
 
   Widget _editTitleTextField() {
