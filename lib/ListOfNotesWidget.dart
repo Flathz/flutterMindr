@@ -233,7 +233,7 @@ class _ListOfNotesWidgetState extends State<ListOfNotesWidget> {
         PopupMenuItem<String>(
             child: const Text('Export notes to .csv'), value: '1'),
         PopupMenuItem<String>(
-            child: const Text('Import note from .csv'), value: '2'),
+            child: const Text('Import notes from .csv'), value: '2'),
       ],
       elevation: 8.0,
     ).then<void>((String itemSelected) {
