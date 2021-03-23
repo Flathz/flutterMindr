@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/Tabs.dart';
-import 'package:badges/badges.dart';
 
 void main() => runApp(MyApp());
 
