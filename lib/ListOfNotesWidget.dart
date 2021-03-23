@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/NoteDetail.dart';
+import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'models/Note.dart';
 import 'package:flutter_app/db_helper.dart';
 import 'package:flutter_app/Csv.dart';
@@ -18,7 +19,7 @@ class _ListOfNotesWidgetState extends State<ListOfNotesWidget> {
   DBHelper dbHelper;
   List<Note> _items = [];
   List<Note> _filterItems = [];
-  Csv csv = null;
+  Csv csv;
 
   @override
   void initState() {
@@ -31,6 +32,14 @@ class _ListOfNotesWidgetState extends State<ListOfNotesWidget> {
         _filterItems = _items;
       });
     });
+
+    KeyboardVisibilityNotification().addNewListener(
+      onChange: (bool visible) {
+        setState(() {
+          if (!visible) FocusScope.of(context).requestFocus(FocusNode());
+        });
+      },
+    );
   }
 
   refreshList() {
