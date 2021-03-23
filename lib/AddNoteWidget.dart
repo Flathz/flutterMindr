@@ -153,6 +153,8 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
     return !keyboardOpen
         ? <Widget>[
             FloatingActionButton(
+              backgroundColor:
+                  _text == init || _text == "" ? Colors.grey : null,
               onPressed: () {
                 cancelNote();
               },
@@ -191,6 +193,8 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
           ]
         : <Widget>[
             FloatingActionButton(
+              backgroundColor:
+                  _text == init || _text == "" ? Colors.grey : null,
               onPressed: () {
                 cancelNote();
               },
@@ -234,7 +238,7 @@ class _AddNoteWidgetState extends State<AddNoteWidget> {
   }
 
   cancelNote() {
-    if (_text == init) {
+    if (_text == init || _text == "") {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Your note is already empty'),
         duration: Duration(milliseconds: 1000),
